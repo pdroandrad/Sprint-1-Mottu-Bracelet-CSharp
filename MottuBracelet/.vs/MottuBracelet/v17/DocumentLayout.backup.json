@@ -1,0 +1,54 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|d:\\users\\pedro\\documents\\estudo\\fiap\\2tdspv\\_sprint1\\net\\mottubracelet\\mottubracelet\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|solutionrelative:mottubracelet\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|d:\\users\\pedro\\documents\\estudo\\fiap\\2tdspv\\_sprint1\\net\\mottubracelet\\mottubracelet\\controllers\\moto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|solutionrelative:mottubracelet\\controllers\\moto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "MottuBracelet\\Data\\AppDbContext.cs",
+              "ToolTip": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "MottuBracelet\\Data\\AppDbContext.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAA5wBoAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T14:21:47.735Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Moto.cs",
+              "DocumentMoniker": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\Controllers\\Moto.cs",
+              "RelativeDocumentMoniker": "MottuBracelet\\Controllers\\Moto.cs",
+              "ToolTip": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\Controllers\\Moto.cs",
+              "RelativeToolTip": "MottuBracelet\\Controllers\\Moto.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAADwv0oAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-17T14:16:27.451Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
