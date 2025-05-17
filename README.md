@@ -33,7 +33,7 @@ Este repositório contém uma versão preliminar do código backend que se integ
 
 ### Pré-requisitos
 
-- .NET 6.0 ou superior
+- .NET 8.0 ou superior
 - Visual Studio 2022 ou superior
 - Acesso ao banco de dados Oracle
 - Conta com usuário e senha válidos
