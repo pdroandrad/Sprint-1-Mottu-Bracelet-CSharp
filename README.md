@@ -7,6 +7,7 @@ Esse bracelete é configurado através de um aplicativo integrando todos os dado
 esse emitirá sinal sonoro e sinal infravermelho capaz de ser visualizado através da câmera do aplicativo.
 
 Este repositório contém uma versão preliminar do código backend que se integra tanto com o banco de dados quanto com a aplicação front-end. Trata-se de uma API Restful que utiliza ASP.NET Core.
+
 ---
 
 ## 👨‍💻 Integrantes
