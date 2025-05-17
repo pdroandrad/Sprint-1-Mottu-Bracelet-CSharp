@@ -12,6 +12,9 @@ USER appuser
 COPY --from=build /app/out ./
 
 EXPOSE 5000
+
+
 ENV ASPNETCORE_URLS=http://+:5000
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 ENTRYPOINT ["dotnet", "MottuBracelet.dll"]
