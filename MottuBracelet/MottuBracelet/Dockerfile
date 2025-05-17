@@ -10,5 +10,8 @@ WORKDIR /app
 RUN useradd -m appuser
 USER appuser
 COPY --from=build /app/out ./
-EXPOSE 80
+
+EXPOSE 5000
+ENV ASPNETCORE_URLS=http://+:5000
+
 ENTRYPOINT ["dotnet", "MottuBracelet.dll"]
