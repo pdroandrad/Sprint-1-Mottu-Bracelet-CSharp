@@ -111,6 +111,6 @@ patio -> dispositivo -> moto -> historicoPatio
 ## Arquivos para Cloud
 
 - [Roteiro com comandos para a criação da VM Linux no Azure via CLI e execução da aplicação através do Docker](roteiro-execucao-docker-vm.txt)
-- [Arquivo com texto para ser copiado para arquivo .sh com scripts para criação da VM](criar-vm.txt)
+- [Arquivo com texto para ser copiado para arquivo .sh com scripts para criação da VM - criar-vm.sh](criar-vm.txt)
 - [Arquivo Dockerfile](MottuBracelet/MottuBracelet/Dockerfile)
 
