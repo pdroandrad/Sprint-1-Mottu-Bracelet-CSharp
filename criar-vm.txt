@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# Variáveis
+RESOURCE_GROUP="rg-mottu"
+LOCATION="brazilsouth"
+VM_NAME="vm-mottu"
+IMAGE="Ubuntu2204"
+SIZE="Standard_B2s"
+ADMIN_USERNAME="admlnx" 
+ADMIN_PASSWORD="Fiap@2tdsvms"
+DISK_SKU="StandardSSD_LRS"
+PORT=80
+SHUTDOWN_TIME="0230" # UTC: desliga 23h30 no Brasil
+
+# Criar grupo de recursos
+echo "Criando grupo de recursos: $RESOURCE_GROUP..."
+az group create --name $RESOURCE_GROUP --location $LOCATION
+
+# Criar a VM
+echo "Criando a máquina virtual: $VM_NAME..."
+az vm create \
+  --resource-group $RESOURCE_GROUP \
+  --name $VM_NAME \
+  --image $IMAGE \
+  --size $SIZE \
+  --authentication-type password \
+  --admin-username $ADMIN_USERNAME \
+  --admin-password $ADMIN_PASSWORD \
+  --storage-sku $DISK_SKU \
+  --public-ip-sku Standard
+
+# Abrir porta 80 para acesso web
+echo "Abrindo porta $PORT (HTTP)..."
+az vm open-port --port $PORT --resource-group $RESOURCE_GROUP --name $VM_NAME
+
+# Ativar desligamento automático
+echo "Configurando desligamento automático às $SHUTDOWN_TIME UTC..."
+az vm auto-shutdown \
+  --resource-group $RESOURCE_GROUP \
+  --name $VM_NAME \
+  --time $SHUTDOWN_TIME
+
+echo "Provisionamento completo!"
