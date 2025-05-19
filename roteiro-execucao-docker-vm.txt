@@ -41,7 +41,7 @@ cd Sprint-1-Mottu-Bracelet-CSharp/MottuBracelet/MottuBracelet
 docker build -t mottu-app .
 
 11. Executar o container:
-docker run -d -p 80:5000 --name mottu-container mottu-app
+docker run -d -p 80:5000 --name mottu-container -v mottu-volume:/app/data mottu-app
 
 12. Fora da VM, verificar o Ip publico da VM:
 az vm show -d -g rg-mottu -n vm-mottu --query publicIps -o tsv
