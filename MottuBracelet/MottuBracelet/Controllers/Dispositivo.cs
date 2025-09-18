@@ -1,101 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MottuBracelet.Data;
+using MottuBracelet.Services;
 using MottuBracelet.Model;
 
 namespace MottuBracelet.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class DispositivosController : ControllerBase
+    [Route("api/[controller]")]
+    public class DispositivoController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ServicoDispositivos _servico;
 
-        public DispositivosController(AppDbContext context)
+        public DispositivoController(ServicoDispositivos servico)
         {
-            _context = context;
+            _servico = servico;
         }
 
+        // Método para obter todos os dispositivos cadastrados, aceitando a paginação.
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Dispositivo>>> GetDispositivos()
+        public async Task<ActionResult<List<Dispositivo>>> ObterTodos(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return await _context.Dispositivo
-                .Include(d => d.Moto)
-                .Include(d => d.Patio)
-                .ToListAsync();
+            var dispositivos = await _servico.ObterPaginadoAsync(pageNumber, pageSize);
+            var total = await _servico.ContarAsync();
+
+            Response.Headers.Add("X-Total-Count", total.ToString());
+            return dispositivos;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Dispositivo>> GetDispositivo(int id)
+        // Método para obter um dispositivo pelo ID.
+        [HttpGet("{id:int}", Name = "ObterDispositivo")]
+        public async Task<ActionResult<Dispositivo>> ObterPorId(int id)
         {
-            var dispositivo = await _context.Dispositivo
-                .Include(d => d.Moto)
-                .Include(d => d.Patio)
-                .FirstOrDefaultAsync(d => d.Id == id);
+            var dispositivo = await _servico.ObterPorIdAsync(id);
+            if (dispositivo == null) return NotFound();
 
-            if (dispositivo == null)
-                return NotFound();
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api";
+            var dispositivoHateoas = _servico.MontarDispositivoComLinks(dispositivo, urlBase);
 
-            return dispositivo;
+            return Ok(dispositivoHateoas);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDispositivo(int id, Dispositivo dispositivo)
-        {
-            if (id != dispositivo.Id)
-                return BadRequest();
-
-            _context.Entry(dispositivo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DispositivoExists(id))
-                    return NotFound();
-                else
-                    throw;
-            }
-
-            return NoContent();
-        }
-
+        // Método para criar um novo dispositivo.
         [HttpPost]
-        public async Task<ActionResult<Dispositivo>> PostDispositivo([FromBody] Dispositivo dispositivo)
+        public async Task<ActionResult<Dispositivo>> Criar(Dispositivo dispositivo)
         {
-            // Limpa referências para evitar problemas
-            dispositivo.Moto = null;
-            dispositivo.Patio = null;
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Dispositivo.Add(dispositivo);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetDispositivo), new { id = dispositivo.Id }, dispositivo);
+            await _servico.CriarAsync(dispositivo);
+            return CreatedAtRoute("ObterDispositivo", new { id = dispositivo.Id }, dispositivo);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDispositivo(int id)
+        // Método para atualizar os dados de um dispositivo existente.
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Atualizar(int id, Dispositivo dispositivoAtualizado)
         {
-            var dispositivo = await _context.Dispositivo.FindAsync(id);
-            if (dispositivo == null)
-                return NotFound();
-
-            _context.Dispositivo.Remove(dispositivo);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var atualizado = await _servico.AtualizarAsync(id, dispositivoAtualizado);
+            return atualizado ? NoContent() : NotFound();
         }
 
-        private bool DispositivoExists(int id)
+        // Método para remover um dispositivo pelo ID.
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Remover(int id)
         {
-            return _context.Dispositivo.Any(e => e.Id == id);
+            var removido = await _servico.RemoverAsync(id);
+            return removido ? NoContent() : NotFound();
         }
     }
 }

@@ -1,85 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MottuBracelet.Data;
+using MottuBracelet.Services;
 using MottuBracelet.Model;
 
 namespace MottuBracelet.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class PatiosController : ControllerBase
+    [Route("api/[controller]")]
+    public class PatioController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ServicoPatios _servico;
 
-        public PatiosController(AppDbContext context)
+        public PatioController(ServicoPatios servico)
         {
-            _context = context;
+            _servico = servico;
         }
 
+        // Método para obter todos os pátios cadastrados, aceitando a paginação.
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Patio>>> GetPatios()
+        public async Task<ActionResult<List<Patio>>> ObterTodos(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return await _context.Patio.ToListAsync();
+            var patios = await _servico.ObterPaginadoAsync(pageNumber, pageSize);
+            var total = await _servico.ContarAsync();
+
+            Response.Headers.Add("X-Total-Count", total.ToString());
+            return patios;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Patio>> GetPatio(int id)
+        // Método para obter um pátio pelo ID.
+        [HttpGet("{id:int}", Name = "ObterPatio")]
+        public async Task<ActionResult<Patio>> ObterPorId(int id)
         {
-            var patio = await _context.Patio.FindAsync(id);
-            if (patio == null)
-                return NotFound();
+            var patio = await _servico.ObterPorIdAsync(id);
+            if (patio == null) return NotFound();
 
-            return patio;
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api";
+            var patioHateoas = _servico.MontarPatioComLinks(patio, urlBase);
+
+            return Ok(patioHateoas);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPatio(int id, Patio patio)
-        {
-            if (id != patio.Id)
-                return BadRequest();
-
-            _context.Entry(patio).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PatioExists(id))
-                    return NotFound();
-                else
-                    throw;
-            }
-
-            return NoContent();
-        }
-
+        // Método para criar um novo pátio.
         [HttpPost]
-        public async Task<ActionResult<Patio>> PostPatio(Patio patio)
+        public async Task<ActionResult<Patio>> Criar(Patio patio)
         {
-            _context.Patio.Add(patio);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return CreatedAtAction(nameof(GetPatio), new { id = patio.Id }, patio);
+            await _servico.CriarAsync(patio);
+            return CreatedAtRoute("ObterPatio", new { id = patio.Id }, patio);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePatio(int id)
+        // Método para atualizar os dados de um pátio existente.
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Atualizar(int id, Patio patioAtualizado)
         {
-            var patio = await _context.Patio.FindAsync(id);
-            if (patio == null)
-                return NotFound();
-
-            _context.Patio.Remove(patio);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var atualizado = await _servico.AtualizarAsync(id, patioAtualizado);
+            return atualizado ? NoContent() : NotFound();
         }
 
-        private bool PatioExists(int id)
+        // Método para remover um pátio pelo ID.
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Remover(int id)
         {
-            return _context.Patio.Any(p => p.Id == id);
+            var removido = await _servico.RemoverAsync(id);
+            return removido ? NoContent() : NotFound();
         }
     }
 }

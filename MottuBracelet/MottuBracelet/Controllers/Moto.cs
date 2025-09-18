@@ -1,121 +1,90 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MottuBracelet.Data;
+using MottuBracelet.Services;
 using MottuBracelet.Model;
+using MottuBracelet.DTO;
 
 namespace MottuBracelet.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MotoController : ControllerBase
+    [ApiController] 
+    [Route("api/[controller]")] 
+    public class MotoController : Controller 
     {
-        private readonly AppDbContext _context;
+        private readonly ServicoMotos _servico; 
 
-        public MotoController(AppDbContext context)
+        
+        public MotoController(ServicoMotos servico)
         {
-            _context = context;
+            _servico = servico; 
         }
 
-        // GET: api/Moto
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Moto>>> GetMotos()
+        // Método para obter todas as motos cadastradas, aceitando a paginação.
+        [HttpGet] 
+        public async Task<ActionResult<List<MotoHateoasDto>>> ObterTodos(
+            [FromQuery] int pageNumber = 1, 
+            [FromQuery] int pageSize = 10)   
         {
-            return await _context.Moto
-                .Include(m => m.Patio)
-                .Include(m => m.Dispositivo)
-                .ToListAsync();
+            var motos = await _servico.ObterPaginadoAsync(pageNumber, pageSize); 
+            var total = await _servico.ContarAsync(); 
+
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api"; 
+            var motosDto = motos.Select(m => _servico.MontarMotoComLinks(m, urlBase)).ToList(); 
+
+            Response.Headers.Add("X-Total-Count", total.ToString()); 
+
+            return Ok(motosDto); 
         }
 
-        // GET: api/Moto/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Moto>> GetMoto(int id)
+        // Método para obter uma moto pelo ID.
+        [HttpGet("{id:int}", Name = "ObterMoto")] 
+        public async Task<ActionResult<MotoHateoasDto>> ObterPorId(int id)
         {
-            var moto = await _context.Moto
-                .Include(m => m.Patio)
-                .Include(m => m.Dispositivo)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var moto = await _servico.ObterPorIdAsync(id); 
+            if (moto == null) return NotFound(); 
 
-            if (moto == null)
-            {
-                return NotFound();
-            }
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api"; 
+            var motoHateoas = _servico.MontarMotoComLinks(moto, urlBase); 
 
-            return moto;
+            return Ok(motoHateoas); 
         }
 
-        // PUT: api/Moto/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMoto(int id, Moto moto)
+        // Método para criar uma nova moto.
+        [HttpPost] 
+        public async Task<ActionResult<MotoHateoasDto>> Criar(Moto moto)
         {
-            if (id != moto.Id)
-                return BadRequest();
+            if (!ModelState.IsValid) 
+                return BadRequest(ModelState); 
 
-            // Verifica se a moto existe
-            var motoExistente = await _context.Moto.FindAsync(id);
-            if (motoExistente == null)
-                return NotFound();
+            await _servico.CriarAsync(moto); 
 
-            // Verifica se o Dispositivo informado existe
-            var dispositivo = await _context.Dispositivo.FindAsync(moto.DispositivoId);
-            if (dispositivo == null)
-                return BadRequest("Dispositivo não encontrado.");
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api"; 
+            var motoHateoas = _servico.MontarMotoComLinks(moto, urlBase); 
 
-            // Atualiza os campos da moto
-            motoExistente.Imei = moto.Imei;
-            motoExistente.Placa = moto.Placa;
-            motoExistente.PatioId = moto.PatioId;
-            motoExistente.DispositivoId = moto.DispositivoId;
-
-            // Atualiza o dispositivo para apontar para esta moto
-            dispositivo.MotoId = moto.Id;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            
+            return CreatedAtRoute("ObterMoto", new { id = moto.Id }, motoHateoas);
         }
 
-        // POST: api/Moto
-        [HttpPost]
-        public async Task<ActionResult<Moto>> PostMoto(Moto moto)
+        // Método para atualizar os dados de uma moto existente.
+        [HttpPut("{id:int}")] 
+        public async Task<IActionResult> Atualizar(int id, Moto motoAtualizada)
         {
-            // Verifica se o dispositivo existe
-            var dispositivo = await _context.Dispositivo.FindAsync(moto.DispositivoId);
-            if (dispositivo == null)
-            {
-                return BadRequest("Dispositivo não encontrado.");
-            }
+            var motoExistente = await _servico.ObterPorIdAsync(id); 
+            if (motoExistente is null) return NotFound(); 
 
-            // Cria a moto
-            _context.Moto.Add(moto);
-            await _context.SaveChangesAsync(); // Salva a moto para gerar o ID
+            motoAtualizada.Id = motoExistente.Id; 
+            var atualizado = await _servico.AtualizarAsync(id, motoAtualizada); 
 
-            // Atualiza o dispositivo com o ID da moto recém-criada
-            dispositivo.MotoId = moto.Id;
-            _context.Dispositivo.Update(dispositivo);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetMoto", new { id = moto.Id }, moto);
+            return atualizado ? NoContent() : NotFound(); 
         }
 
-        // DELETE: api/Moto/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMoto(int id)
+        // Método para remover uma moto pelo ID.
+        [HttpDelete("{id:int}")] 
+        public async Task<IActionResult> Remover(int id)
         {
-            var moto = await _context.Moto.FindAsync(id);
-            if (moto == null)
-            {
-                return NotFound();
-            }
+            var motoExistente = await _servico.ObterPorIdAsync(id); 
+            if (motoExistente is null) return NotFound(); 
 
-            _context.Moto.Remove(moto);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool MotoExists(int id)
-        {
-            return _context.Moto.Any(e => e.Id == id);
+            var removido = await _servico.RemoverAsync(id); 
+            return removido ? NoContent() : NotFound(); 
         }
     }
 }

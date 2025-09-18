@@ -1,12 +1,37 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\",
-  "Documents": [],
+  "WorkspaceRootPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|d:\\users\\pedro\\documents\\estudo\\fiap\\2tdspv\\_sprint3\\dotnet\\sprint-3-mottu-bracelet-csharp\\mottubracelet\\mottubracelet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A90D5089-795D-456B-B206-264A955773F8}|MottuBracelet\\MottuBracelet.csproj|solutionrelative:mottubracelet\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\MottuBracelet\\Program.cs",
+              "RelativeDocumentMoniker": "MottuBracelet\\Program.cs",
+              "ToolTip": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\MottuBracelet\\Program.cs",
+              "RelativeToolTip": "MottuBracelet\\Program.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAACQAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T13:53:11.34Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

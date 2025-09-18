@@ -3765,11 +3765,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\MottuBracelet.csproj",
+      "projectUniqueName": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\MottuBracelet\\MottuBracelet.csproj",
       "projectName": "MottuBracelet",
-      "projectPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\MottuBracelet.csproj",
+      "projectPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\MottuBracelet\\MottuBracelet.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint1\\net\\MottuBracelet\\MottuBracelet\\obj\\",
+      "outputPath": "D:\\Users\\Pedro\\Documents\\Estudo\\FIAP\\2TDSPV\\_sprint3\\dotnet\\Sprint-3-Mottu-Bracelet-CSharp\\MottuBracelet\\MottuBracelet\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

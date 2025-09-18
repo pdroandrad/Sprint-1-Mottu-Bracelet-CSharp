@@ -5,10 +5,30 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Dispositivos": {
+    "/api/Dispositivo": {
       "get": {
         "tags": [
-          "Dispositivos"
+          "Dispositivo"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -44,7 +64,7 @@
       },
       "post": {
         "tags": [
-          "Dispositivos"
+          "Dispositivo"
         ],
         "requestBody": {
           "content": {
@@ -89,11 +109,12 @@
         }
       }
     },
-    "/api/Dispositivos/{id}": {
+    "/api/Dispositivo/{id}": {
       "get": {
         "tags": [
-          "Dispositivos"
+          "Dispositivo"
         ],
+        "operationId": "ObterDispositivo",
         "parameters": [
           {
             "name": "id",
@@ -130,7 +151,7 @@
       },
       "put": {
         "tags": [
-          "Dispositivos"
+          "Dispositivo"
         ],
         "parameters": [
           {
@@ -170,7 +191,7 @@
       },
       "delete": {
         "tags": [
-          "Dispositivos"
+          "Dispositivo"
         ],
         "parameters": [
           {
@@ -190,10 +211,30 @@
         }
       }
     },
-    "/api/HistoricoPatios": {
+    "/api/HistoricoPatio": {
       "get": {
         "tags": [
-          "HistoricoPatios"
+          "HistoricoPatio"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -229,7 +270,7 @@
       },
       "post": {
         "tags": [
-          "HistoricoPatios"
+          "HistoricoPatio"
         ],
         "requestBody": {
           "content": {
@@ -274,11 +315,12 @@
         }
       }
     },
-    "/api/HistoricoPatios/{id}": {
+    "/api/HistoricoPatio/{id}": {
       "get": {
         "tags": [
-          "HistoricoPatios"
+          "HistoricoPatio"
         ],
+        "operationId": "ObterHistoricoPatio",
         "parameters": [
           {
             "name": "id",
@@ -315,7 +357,7 @@
       },
       "put": {
         "tags": [
-          "HistoricoPatios"
+          "HistoricoPatio"
         ],
         "parameters": [
           {
@@ -355,7 +397,7 @@
       },
       "delete": {
         "tags": [
-          "HistoricoPatios"
+          "HistoricoPatio"
         ],
         "parameters": [
           {
@@ -380,6 +422,26 @@
         "tags": [
           "Moto"
         ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -388,7 +450,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Moto"
+                    "$ref": "#/components/schemas/MotoHateoasDto"
                   }
                 }
               },
@@ -396,7 +458,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Moto"
+                    "$ref": "#/components/schemas/MotoHateoasDto"
                   }
                 }
               },
@@ -404,7 +466,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Moto"
+                    "$ref": "#/components/schemas/MotoHateoasDto"
                   }
                 }
               }
@@ -441,17 +503,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               }
             }
@@ -464,6 +526,7 @@
         "tags": [
           "Moto"
         ],
+        "operationId": "ObterMoto",
         "parameters": [
           {
             "name": "id",
@@ -481,17 +544,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Moto"
+                  "$ref": "#/components/schemas/MotoHateoasDto"
                 }
               }
             }
@@ -560,10 +623,30 @@
         }
       }
     },
-    "/api/Patios": {
+    "/api/Patio": {
       "get": {
         "tags": [
-          "Patios"
+          "Patio"
+        ],
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -599,7 +682,7 @@
       },
       "post": {
         "tags": [
-          "Patios"
+          "Patio"
         ],
         "requestBody": {
           "content": {
@@ -644,11 +727,12 @@
         }
       }
     },
-    "/api/Patios/{id}": {
+    "/api/Patio/{id}": {
       "get": {
         "tags": [
-          "Patios"
+          "Patio"
         ],
+        "operationId": "ObterPatio",
         "parameters": [
           {
             "name": "id",
@@ -685,7 +769,7 @@
       },
       "put": {
         "tags": [
-          "Patios"
+          "Patio"
         ],
         "parameters": [
           {
@@ -725,7 +809,7 @@
       },
       "delete": {
         "tags": [
-          "Patios"
+          "Patio"
         ],
         "parameters": [
           {
@@ -741,45 +825,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      }
-    },
-    "/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "GetWeatherForecast",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -876,6 +921,24 @@
         },
         "additionalProperties": false
       },
+      "LinkDto": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "nullable": true
+          },
+          "rel": {
+            "type": "string",
+            "nullable": true
+          },
+          "method": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "Moto": {
         "type": "object",
         "properties": {
@@ -899,6 +962,31 @@
           "dispositivoId": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MotoHateoasDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "imei": {
+            "type": "string",
+            "nullable": true
+          },
+          "placa": {
+            "type": "string",
+            "nullable": true
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkDto"
+            },
             "nullable": true
           }
         },
@@ -931,29 +1019,6 @@
           },
           "endereco": {
             "$ref": "#/components/schemas/Endereco"
-          }
-        },
-        "additionalProperties": false
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
-            "type": "string",
-            "nullable": true
           }
         },
         "additionalProperties": false

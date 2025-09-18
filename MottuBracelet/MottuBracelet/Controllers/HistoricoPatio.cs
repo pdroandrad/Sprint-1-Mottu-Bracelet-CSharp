@@ -1,92 +1,70 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MottuBracelet.Data;
+using MottuBracelet.Services;
 using MottuBracelet.Model;
 
 namespace MottuBracelet.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class HistoricoPatiosController : ControllerBase
+    [Route("api/[controller]")]
+    public class HistoricoPatioController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ServicoHistoricoPatios _servico;
 
-        public HistoricoPatiosController(AppDbContext context)
+        public HistoricoPatioController(ServicoHistoricoPatios servico)
         {
-            _context = context;
+            _servico = servico;
         }
 
+        // Método para obter todos os históricos cadastrados, aceitando a paginação.
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HistoricoPatio>>> GetHistoricos()
+        public async Task<ActionResult<List<HistoricoPatio>>> ObterTodos(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            return await _context.HistoricoPatio
-                .Include(h => h.Moto)
-                .Include(h => h.Patio)
-                .ToListAsync();
+            var historicos = await _servico.ObterPaginadoAsync(pageNumber, pageSize);
+            var total = await _servico.ContarAsync();
+
+            Response.Headers.Add("X-Total-Count", total.ToString());
+            return historicos;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<HistoricoPatio>> GetHistorico(int id)
+        // Método para obter um histórico pelo ID.
+        [HttpGet("{id:int}", Name = "ObterHistoricoPatio")]
+        public async Task<ActionResult<HistoricoPatio>> ObterPorId(int id)
         {
-            var historico = await _context.HistoricoPatio
-                .Include(h => h.Moto)
-                .Include(h => h.Patio)
-                .FirstOrDefaultAsync(h => h.Id == id);
+            var historico = await _servico.ObterPorIdAsync(id);
+            if (historico == null) return NotFound();
 
-            if (historico == null)
-                return NotFound();
+            var urlBase = $"{Request.Scheme}://{Request.Host}/api";
+            var historicoHateoas = _servico.MontarHistoricoComLinks(historico, urlBase);
 
-            return historico;
+            return Ok(historicoHateoas);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutHistorico(int id, HistoricoPatio historico)
-        {
-            if (id != historico.Id)
-                return BadRequest();
-
-            _context.Entry(historico).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!HistoricoExists(id))
-                    return NotFound();
-                else
-                    throw;
-            }
-
-            return NoContent();
-        }
-
+        // Método para criar um novo histórico.
         [HttpPost]
-        public async Task<ActionResult<HistoricoPatio>> PostHistorico(HistoricoPatio historico)
+        public async Task<ActionResult<HistoricoPatio>> Criar(HistoricoPatio historico)
         {
-            _context.HistoricoPatio.Add(historico);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            return CreatedAtAction(nameof(GetHistorico), new { id = historico.Id }, historico);
+            await _servico.CriarAsync(historico);
+            return CreatedAtRoute("ObterHistoricoPatio", new { id = historico.Id }, historico);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteHistorico(int id)
+        // Método para atualizar os dados de um histórico existente.
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Atualizar(int id, HistoricoPatio historicoAtualizado)
         {
-            var historico = await _context.HistoricoPatio.FindAsync(id);
-            if (historico == null)
-                return NotFound();
-
-            _context.HistoricoPatio.Remove(historico);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var atualizado = await _servico.AtualizarAsync(id, historicoAtualizado);
+            return atualizado ? NoContent() : NotFound();
         }
 
-        private bool HistoricoExists(int id)
+        // Método para remover um histórico pelo ID.
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Remover(int id)
         {
-            return _context.HistoricoPatio.Any(e => e.Id == id);
+            var removido = await _servico.RemoverAsync(id);
+            return removido ? NoContent() : NotFound();
         }
     }
 }
